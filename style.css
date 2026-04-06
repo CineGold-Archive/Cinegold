@@ -1,0 +1,467 @@
+/* --- 1. Global Variables & Base Setup --- */
+:root {
+    --gold: #d4af37;
+    --gold-glow: rgba(212, 175, 55, 0.3);
+    --deep-bg: #050505;
+    --ticket-white: #ffffff;
+    --red-carpet: #e50914;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--deep-bg);
+    color: white;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+}
+
+/* --- 2. Atmospheric Kinetic Background --- */
+#kinetic-background {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(circle at center, #1a1a1a 0%, var(--deep-bg) 100%);
+}
+
+/* Real Film Grain Texture */
+#kinetic-background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.04;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Projector Light Leak Effect */
+#kinetic-background::before {
+    content: "";
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    width: 140%;
+    height: 140%;
+    background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.04) 0%, transparent 50%);
+    filter: blur(80px);
+    animation: drift 30s ease-in-out infinite alternate;
+}
+
+/* --- 3. Login Container (The Vintage Ticket) --- */
+.login-container {
+    position: relative;
+    background: var(--ticket-white);
+    color: #121212;
+    width: 360px;
+    padding: 60px 45px;
+    border-radius: 2px;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+    /* Perforated Edge Details */
+    background-image:
+        radial-gradient(circle at 0 50%, transparent 12px, white 13px),
+        radial-gradient(circle at 100% 50%, transparent 12px, white 13px);
+}
+
+.ticket-stub-top {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 4px;
+    background: var(--red-carpet);
+}
+
+h2 {
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    text-align: center;
+    font-weight: 900;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 10px;
+    text-align: center;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 15px 0 40px 0;
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 20px;
+}
+
+/* Inputs */
+.input-group label {
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #aaa;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #eee;
+    padding: 12px 0;
+    margin-bottom: 25px;
+    font-size: 16px;
+    background: transparent;
+    transition: border-color 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-bottom-color: var(--gold);
+}
+
+#loginBtn {
+    width: 100%;
+    background: #121212;
+    color: var(--gold);
+    border: none;
+    padding: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    cursor: pointer;
+    margin-top: 10px;
+    /* Ticket Stub Shape */
+    clip-path: polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%);
+    transition: all 0.3s ease;
+}
+
+#loginBtn:hover {
+    background: var(--gold);
+    color: #121212;
+    transform: scale(1.03);
+}
+
+/* --- 4. The Theater Page (Movie Search) --- */
+#theaterPage {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.theater-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.theater-header h1 {
+    font-size: 48px;
+    font-weight: 900;
+    letter-spacing: -2px;
+}
+
+.theater-header h1 span {
+    color: var(--gold);
+    text-shadow: 0 0 20px var(--gold-glow);
+}
+
+.search-wrapper input {
+    max-width: 600px;
+    background: var(--glass-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    padding: 18px 30px;
+    color: white;
+    font-size: 18px;
+    backdrop-filter: blur(10px);
+    margin: 0 auto;
+    display: block;
+}
+
+.movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 30px;
+}
+
+/* Movie Card Design */
+.movie-card {
+    background: var(--glass-bg);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.movie-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    border-color: var(--gold);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* --- 5. Transitions & States --- */
+.hidden {
+    display: none !important;
+}
+
+#theaterPage.active {
+    display: block;
+    animation: slideUpFade 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.ticket-out {
+    pointer-events: none;
+    transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transform: scale(0.8) translateY(-120vh) !important;
+    opacity: 0;
+}
+
+.modal.hidden {
+    display: none !important;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #121212;
+    border: 1px solid var(--gold);
+    max-width: 900px;
+    width: 100%;
+    border-radius: 4px;
+    position: relative;
+    padding: 40px;
+    box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-flex {
+    display: flex;
+    gap: 40px;
+}
+
+.modal-poster {
+    width: 300px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-text h1 {
+    margin-top: 0;
+    font-size: 2.5rem;
+    letter-spacing: -1px;
+}
+
+/* Responsive adjustment for small screens */
+@media (max-width: 768px) {
+    .modal-flex {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .modal-poster {
+        width: 200px;
+    }
+}
+
+.gold-text {
+    color: var(--gold);
+}
+
+.rating {
+    font-weight: bold;
+    margin: 20px 0;
+    font-size: 1.2rem;
+}
+
+.plot {
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 25px;
+}
+
+.specs p {
+    margin: 8px 0;
+    font-size: 0.9rem;
+}
+
+.specs strong {
+    color: var(--gold);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.stream-link {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 40px;
+    cursor: pointer;
+    color: var(--gold);
+}
+
+/* Keyframes */
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes drift {
+    from {
+        transform: translate(-5%, -5%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(5%, 5%) rotate(3deg);
+    }
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+        transform: translate3d(4px, 0, 0);
+    }
+}
+
+.filter-console {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto 40px;
+}
+
+.filter-controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.filter-controls select {
+    background: var(--glass-bg);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.filter-controls select:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.filter-controls select option {
+    background: #121212;
+    color: white;
+}
+
+.gold-text {
+    color: var(--gold);
+    font-weight: bold;
+}
+
+.stream-link {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 8px 15px;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: 0.3s;
+}
+
+.stream-link:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+/* Ensure movie titles in cards look professional */
+.movie-info h3 {
+    font-size: 1rem;
+    margin: 0 0 5px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.load-more-container {
+    display: flex;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+#loadMoreBtn {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 15px 40px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-radius: 2px;
+}
+
+#loadMoreBtn:hover {
+    background: var(--gold);
+    color: #121212;
+    box-shadow: 0 0 20px var(--gold-glow);
+    transform: scale(1.05);
+}
+
+/* Ensure the button hides smoothly */
+#loadMoreBtn.hidden {
+    display: none;
+}
