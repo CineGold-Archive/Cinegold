@@ -26,31 +26,48 @@ const detailsContainer = document.getElementById('modalDetails');
 /**
  * 2. LOGIN & SECURITY
  */
-loginBtn.addEventListener('click', () => {
+// Notice we added 'e' here
+loginBtn.addEventListener('click', (e) => {
+    e.preventDefault(); // <-- This stops the page from instantly refreshing
+
     const email = document.getElementById('email').value.trim();
     const pass = document.getElementById('password').value.trim();
     const user = AUTHORIZED_USERS.find(u => u.email === email && u.password === pass);
 
+    // 1. Handle the error message element
+    let errorMsg = document.getElementById('loginErrorMsg');
+    if (!errorMsg) {
+        errorMsg = document.createElement('p');
+        errorMsg.id = 'loginErrorMsg';
+        errorMsg.style.color = '#ff4d4d';
+        errorMsg.style.textAlign = 'center';
+        errorMsg.style.marginTop = '10px';
+        errorMsg.style.fontWeight = 'bold'; // Made it bold to stand out more
+        loginBtn.parentNode.insertBefore(errorMsg, loginBtn.nextSibling);
+    }
+
+    // 2. Check the credentials
     if (user) {
+        errorMsg.style.display = 'none'; // Hide error
         loginPage.classList.add('ticket-out');
         setTimeout(() => {
             loginPage.classList.add('hidden');
             theaterPage.classList.remove('hidden');
             theaterPage.classList.add('active');
-            // Initial landing content
             startNewSearch('Gold');
         }, 800);
     } else {
         triggerErrorEffect();
+        errorMsg.style.display = 'block'; // Show error
+        errorMsg.innerText = 'Incorrect email or password.';
     }
 });
 
 function triggerErrorEffect() {
     loginPage.style.animation = 'none';
-    void loginPage.offsetWidth; // Force CSS reflow
+    void loginPage.offsetWidth;
     loginPage.style.animation = 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both';
 }
-
 /**
  * 3. THE ARCHIVE ENGINE (Search & Load More)
  */
