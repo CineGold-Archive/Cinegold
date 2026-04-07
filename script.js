@@ -26,13 +26,11 @@ const detailsContainer = document.getElementById('modalDetails');
 /**
  * 2. LOGIN & SECURITY
  */
-// Notice we added 'e' here
 loginBtn.addEventListener('click', (e) => {
-    e.preventDefault(); // <-- This stops the page from instantly refreshing
+    e.preventDefault();
 
     const email = document.getElementById('email').value.trim();
     const pass = document.getElementById('password').value.trim();
-    const user = AUTHORIZED_USERS.find(u => u.email === email && u.password === pass);
 
     // 1. Handle the error message element
     let errorMsg = document.getElementById('loginErrorMsg');
@@ -42,13 +40,25 @@ loginBtn.addEventListener('click', (e) => {
         errorMsg.style.color = '#ff4d4d';
         errorMsg.style.textAlign = 'center';
         errorMsg.style.marginTop = '10px';
-        errorMsg.style.fontWeight = 'bold'; // Made it bold to stand out more
+        errorMsg.style.fontWeight = 'bold';
         loginBtn.parentNode.insertBefore(errorMsg, loginBtn.nextSibling);
     }
 
-    // 2. Check the credentials
-    if (user) {
-        errorMsg.style.display = 'none'; // Hide error
+    // 2. Determine the exact error scenario
+    let errorMessage = "";
+    const userByEmail = AUTHORIZED_USERS.find(u => u.email === email);
+
+    if (!email || !pass) {
+        errorMessage = "Please enter both email and password.";
+    } else if (!userByEmail) {
+        errorMessage = "Email does not exist.";
+    } else if (userByEmail.password !== pass) {
+        errorMessage = "Password does not match.";
+    }
+
+    // 3. Process login or display specific error
+    if (errorMessage === "") {
+        errorMsg.style.display = 'none';
         loginPage.classList.add('ticket-out');
         setTimeout(() => {
             loginPage.classList.add('hidden');
@@ -58,8 +68,8 @@ loginBtn.addEventListener('click', (e) => {
         }, 800);
     } else {
         triggerErrorEffect();
-        errorMsg.style.display = 'block'; // Show error
-        errorMsg.innerText = 'Incorrect email or password.';
+        errorMsg.style.display = 'block';
+        errorMsg.innerText = errorMessage;
     }
 });
 
