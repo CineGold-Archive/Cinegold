@@ -2,7 +2,7 @@
 🎬 CineGold Premiere
 CineGold Premiere is a professional movie discovery platform designed with a high-end "Midnight Gold" aesthetic. It provides users with a premium "theater experience" right in their browser, featuring secure access, advanced search capabilities, and deep metadata integration.
 
-Live Demo
+Live Demo - https://cinegold-archive.github.io/Cinegold/
 
 ✨ Features
 Ticket Entrance (Secure Login): A dedicated entry portal for authorized users, ensuring a secure and curated experience.
